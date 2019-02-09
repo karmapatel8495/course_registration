@@ -1,0 +1,47 @@
+CREATE TABLE student (student_id INT, name VARCHAR(45), PRIMARY KEY (student_id));
+
+
+CREATE TABLE registration (reg_id INT, student_id INT, subject_id INT, PRIMARY KEY (reg_id));
+
+
+CREATE TABLE subject (subject_id INT, subject_code VARCHAR(45), subject_name VARCHAR(45), PRIMARY KEY (subject_id));
+
+
+ALTER TABLE registration ADD FOREIGN KEY (student_id) REFERENCES student(student_id);
+ALTER TABLE registration ADD FOREIGN KEY (subject_id) REFERENCES subject(subject_id);
+
+INSERT INTO student (student_id, name)
+   VALUES
+   (2019000001, "Adam");
+
+
+INSERT INTO student (student_id, name)
+   VALUES
+   (2019000002, "Eve");
+
+
+
+INSERT INTO subject (subject_id, subject_code, subject_name)
+   VALUES
+   (1000101, "CS101", "Introduction to Database Management");
+
+
+INSERT INTO subject (subject_id, subject_code, subject_name)
+   VALUES
+   (1000102, "CS102", "Introduction to Java Programming");
+
+
+INSERT INTO registration (reg_id, student_id, subject_id)
+	VALUES
+	(1, 2019000001, 1000101);
+
+
+INSERT INTO registration (reg_id, student_id, subject_id)
+	VALUES
+	(2, 2019000001, 1000102);
+
+
+INSERT INTO registration (reg_id, student_id, subject_id)
+	VALUES
+	(3, 2019000002, 1000101);
+
