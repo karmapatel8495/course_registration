@@ -1,2 +1,1 @@
-# course_registration
-AWS Aurora
+# Course Registration utility using AWS Aurora and REST API
