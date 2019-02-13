@@ -31,78 +31,6 @@ public class ViewApplication {
 	static String CONSTANT_PORT = "3306";
 
 	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping("/")
-	String getView(Model model) {
-
-		String student_id = "2019000001";
-
-		Connection connection = getRemoteConnection();
-		Statement statement = null;
-		ArrayList<Registration> regList = new ArrayList<Registration>();
-		ArrayList<String> subjectIDList = new ArrayList<String>();
-		ArrayList<Subject> subjectList = new ArrayList<Subject>();
-		Student student = new Student();
-		try {
-			statement = connection.createStatement();
-			ResultSet studentresults = statement
-					.executeQuery("SELECT * FROM student WHERE student_id = " + student_id + ";");
-			while (studentresults.next()) {
-				int studentID = studentresults.getInt(1);
-				String studentName = studentresults.getString(2);
-				student.setStudentID(Integer.toString(studentID));
-				student.setStudentName(studentName);
-			}
-			statement = connection.createStatement();
-			ResultSet registrationresults = statement
-					.executeQuery("SELECT * FROM registration WHERE student_id = " + student_id + ";");
-			while (registrationresults.next()) {
-				int regID = registrationresults.getInt(1);
-				int subjectID = registrationresults.getInt(3);
-				Registration reg = new Registration();
-				reg.setRegID(Integer.toString(regID));
-				reg.setSubjectID(Integer.toString(subjectID));
-				reg.setStudentID(student_id);
-				regList.add(reg);
-				subjectIDList.add(Integer.toString(subjectID));
-			}
-			for (int i = 0; i < subjectIDList.size(); i++) {
-				String currentSubjectID = subjectIDList.get(i);
-				statement = connection.createStatement();
-				ResultSet subjectresults = statement
-						.executeQuery("SELECT * FROM subject WHERE subject_id = " + currentSubjectID + ";");
-				while (subjectresults.next()) {
-					Subject subject = new Subject();
-					int subjectID = subjectresults.getInt(1);
-					String subjectCode = subjectresults.getString(2);
-					String subjectName = subjectresults.getString(3);
-					subject.setSubjectID(Integer.toString(subjectID));
-					subject.setSubjectCode(subjectCode);
-					subject.setSubjectName(subjectName);
-					subjectList.add(subject);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		Map<String, Subject> viewMap = new HashMap<String, Subject>();
-		for (int i = 0; i < subjectList.size(); i++) {
-			Subject currentSubject = subjectList.get(i);
-			viewMap.put(currentSubject.getSubjectID(), currentSubject);
-		}
-		Subject studentDetails = new Subject();
-		studentDetails.setSubjectID(student.getStudentID());
-		studentDetails.setSubjectName(student.getStudentName());
-		viewMap.put("studentdetails", studentDetails);
-		Gson gson = new Gson();
-		String jsonData = gson.toJson(viewMap);
-		model.addAttribute("studentID", student.getStudentID());
-		model.addAttribute("studentName", student.getStudentName());
-		model.addAttribute("jsonData", jsonData);
-		return jsonData;
-	}
-
-	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "getdata", method = RequestMethod.GET)
 	String getitem(@RequestParam("studentid") String student_id, Model model) {
 		System.out.println(student_id);
@@ -164,7 +92,6 @@ public class ViewApplication {
 		Subject studentDetails = new Subject();
 		studentDetails.setSubjectID(student.getStudentID());
 		studentDetails.setSubjectName(student.getStudentName());
-//		viewMap.put("studentdetails", studentDetails);
 		Gson gson = new Gson();
 		String jsonData = gson.toJson(viewMap);
 		model.addAttribute("studentID", student.getStudentID());
